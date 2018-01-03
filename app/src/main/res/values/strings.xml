@@ -1,0 +1,206 @@
+<resources>
+    <string name="app_name">N2 Vocabulary</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="kanji">Kanji</string>
+    <string name="furi">Furigana</string>
+    <string name="no">No.</string>
+    <string name="favourite">Favourite</string>
+    <string name="meaning">Meaning</string>
+    <string name="week_day">Week/Day</string>
+
+    <string name="quiz">N2 Vocabulary Quiz</string>
+    <string name="question_speaker">Speak Question</string>
+    <string name="qtotal">No/Total</string>
+    <string name="qno">No.</string>
+    <string name="question">Question</string>
+    <string name="option1">Option 1</string>
+    <string name="option2">Option 2</string>
+    <string name="option3">Option 3</string>
+    <string name="option4">Option 4</string>
+    <string name="prev">Previous</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
+    <string name="description">Answer</string>
+
+    <string name="score">Your Score</string>
+    <string name="result">Correct/Total</string>
+    <string name="check">Check</string>
+    <string name="ok">OK</string>
+    <string name="exit">Exit</string>
+    <string name="settings">Settings</string>
+    <string name="favourites">Favourites</string>
+
+    <string-array name="font_type">
+        <item>Zawgyi</item>
+        <item>Unicode</item>
+    </string-array>
+
+    <string-array name="main_content">
+        <item>{第;だい}1{週;しゅう}　{楽;たの}しく{暮;く}らしていますか?</item>
+        <item>{第;だい}2{週;しゅう}　{仕事;しごと}は{順調;じゅんちょう}ですか?</item>
+        <item>{第;だい}3{週;しゅう}　いろいろ{表現;ひょうげん}しましょう</item>
+        <item>{第;だい}4{週;しゅう}　{副詞;ふくし}をたっぷり{覚;おぼ}えましょう</item>
+        <item>{第;だい}5{週;しゅう}　やさしい{漢字;かんじ}で{書;か}きますが</item>
+        <item>{第;だい}6{週;しゅう}　まとめて{覚;おぼ}えましょう 1</item>
+        <item>{第;だい}7{週;しゅう}　まとめて{覚;おぼ}えましょう 2</item>
+        <item>{第;だい}８{週;しゅう}　まとめて{覚;おぼ}えましょう 1</item>
+    </string-array>
+
+    <string-array name="day1_content">
+        <item>1{日目;にちめ}　アパートを{探;さが}しています</item>
+        <item>2{日目;にちめ}　{引; ひ}っ{越;こ}しは{大変;たいへん}です</item>
+        <item>3{日目;にちめ}　{友人;ゆうじん}を{招;まね}きました</item>
+        <item>4{日目;にちめ}　{家事;かじ}・{子育;こそだ}ては{大変;たいへん}です</item>
+        <item>5{日目;にちめ}　{夏休;なつやす}みを{海;うみ}で{過;す}ごしています</item>
+        <item>6{日目;にちめ}　お{金;かね}を{使;つか}いすぎました</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day2_content">
+        <item>1{日目;にちめ}　{仕事;しごと}を{探;さが}しています</item>
+        <item>2{日目;にちめ}　{仕事;しごと}をしています1</item>
+        <item>3{日目;にちめ}　{仕事;しごと}をしています2</item>
+        <item>4{日目;にちめ}　パソコンを{使;つか}っています 1</item>
+        <item>5{日目;にちめ}　パソコンを{使;つか}っています 2</item>
+        <item>6{日目;にちめ}　パソコンを{使;つか}っています 3</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day3_content">
+        <item>1{日目;にちめ}　どんな{人;ひと}ですか?</item>
+        <item>2{日目;にちめ}　どんな{様子;ようす}ですか?</item>
+        <item>3{日目;にちめ}　どんな{動作;どうさ}ですか?</item>
+        <item>4{日目;にちめ}　どんな{気持;きも}ち・{態度;たいど}ですか? 1</item>
+        <item>5{日目;にちめ}　どんな{気持;きも}ち・{態度;たいど}ですか? 1</item>
+        <item>6{日目;にちめ}　{体;からだ}の{具合;ぐあい}はどうですか?</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day4_content">
+        <item>1{日目;にちめ}　なんとか{覚;ぉぼ}えよう!</item>
+        <item>2{日目;にちめ}　いずれ{覚;ぉぼ}えられる!</item>
+        <item>3{日目;にちめ}　せっせと{覚;ぉぼ}えよう!</item>
+        <item>4{日目;にちめ}　さらに{覚;ぉぼ}えよう!</item>
+        <item>5{日目;にちめ}　{取;と}り{覚;ぉぼ}えよう!</item>
+        <item>6{日目;にちめ}　いったん{覚;ぉぼ}えたら{忘;わす}れない!</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day5_content">
+        <item>1{日目;にちめ}　{物事;ものごと}・{日中;にっちゅう}・{年月;ねんげつ}</item>
+        <item>2{日目;にちめ}　{夜中;よなか}・{世間;せけん}・{作業;さぎょう}</item>
+        <item>3{日目;にちめ}　{一生;いっしょう}・{用心;ようじん}・{見事;みごと}</item>
+        <item>4{日目;にちめ}　{土地;とち}・{名字;みょうじ}・{発売;はつばい}</item>
+        <item>5{日目;にちめ}　{手品;てじな}・{合図;あいず}・{強気;つよき}</item>
+        <item>6{日目;にちめ}　{本気;ほんき}・{気楽;きらく}・{目安;めやす}</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day6_content">
+        <item>1{日目;にちめ}　カタカナで{書;か}く{言葉;ことば} 1</item>
+        <item>2{日目;にちめ}　カタカナで{書;か}く{言葉;ことば} 2</item>
+        <item>3{日目;にちめ}　カタカナで{書;か}く{言葉;ことば} 3</item>
+        <item>4{日目;にちめ}　{似;に}ている{言葉;ことば} 1</item>
+        <item>5{日目;にちめ}　{似;に}ている{言葉;ことば} 2</item>
+        <item>6{日目;にちめ}　{似;に}ている{言葉;ことば} 3</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day7_content">
+        <item>1{日目;にちめ}　{意味;いみ}がたくさんある{言葉;ことば} 1</item>
+        <item>2{日目;にちめ}　{意味;いみ}がたくさんある{言葉;ことば} 2</item>
+        <item>3{日目;にちめ}　{意味;いみ}がたくさんある{言葉;ことば} 3</item>
+        <item>4{日目;にちめ}　{言葉;ことば}の{前;まえ}につく{語;ご}</item>
+        <item>5{日目;にちめ}　{言葉;ことば}の{後;うし}ろにつく{語;ご} 1</item>
+        <item>6{日目;にちめ}　{言葉;ことば}の{後;うし}ろにつく{語;ご} 2</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+
+    <string-array name="day8_content">
+        <item>1{日目;にちめ}　{組;く}み{合;あ}わせの{言葉;ことば} 1</item>
+        <item>2{日目;にちめ}　{組;く}み{合;あ}わせの{言葉;ことば} 2</item>
+        <item>3{日目;にちめ}　よく{使;つか}わねる{表現;ひょうげん} 1</item>
+        <item>4{日目;にちめ}　よく{使;つか}わねる{表現;ひょうげん} 2</item>
+        <item>5{日目;にちめ}　よく{使;つか}わねる{表現;ひょうげん} 3</item>
+        <item>6{日目;にちめ}　よく{使;つか}わねる{表現;ひょうげん} 4</item>
+        <item>7{日目;にちめ}　{実戦問題;じっせんもんだい}</item>
+    </string-array>
+    <string name="title_activity_settings2">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+</resources>
