@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/N2Vocabulary.iml" filepath="$PROJECT_DIR$/N2Vocabulary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/N2Vocabulary.iml" filepath="$PROJECT_DIR$/.idea/N2Vocabulary.iml" />
     </modules>
   </component>
 </project>
