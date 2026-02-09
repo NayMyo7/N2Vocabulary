@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../data/db/n2_vocabulary_database.dart';
-import '../data/repositories/n2_vocabulary_repository.dart';
+import '../data/db/n2vocabulary_database.dart';
+import '../data/repositories/n2vocabulary_repository.dart';
 import '../domain/models/vocabulary.dart';
 
 part 'providers.g.dart';

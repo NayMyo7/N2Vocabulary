@@ -1,7 +1,7 @@
 import '../../domain/models/paginated_result.dart';
 import '../../domain/models/question.dart';
 import '../../domain/models/vocabulary.dart';
-import '../db/n2_vocabulary_database.dart';
+import '../db/n2vocabulary_database.dart';
 
 class N2VocabularyRepository {
   N2VocabularyRepository(this._db);
