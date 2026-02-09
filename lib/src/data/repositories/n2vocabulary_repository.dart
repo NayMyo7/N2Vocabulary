@@ -28,18 +28,18 @@ class N2VocabularyRepository {
       whereArgs.add(1);
     }
 
-    if (filters.week != null) {
-      // Calculate day range for the week
-      final startDay = (filters.week! - 1) * 7 + 1;
-      final endDay = filters.week! * 7;
-      whereConditions.add('DAY BETWEEN ? AND ?');
-      whereArgs.addAll([startDay, endDay]);
-    }
-
-    if (filters.day != null) {
-      // Day filter (1-7 for day of week)
-      whereConditions.add('((DAY - 1) % 7) + 1 = ?');
-      whereArgs.add(filters.day);
+    if (filters.week != null && filters.day != null) {
+      // Both week and day selected: filter by both WEEK and DAY columns
+      whereConditions.add('WEEK = ? AND DAY = ?');
+      whereArgs.addAll([filters.week!, filters.day!]);
+    } else if (filters.week != null) {
+      // Only week selected: filter by WEEK column
+      whereConditions.add('WEEK = ?');
+      whereArgs.add(filters.week!);
+    } else if (filters.day != null) {
+      // Only day selected: show only first occurrence from Week 1
+      whereConditions.add('WEEK = 1 AND DAY = ?');
+      whereArgs.add(filters.day!);
     }
 
     if (filters.query != null && filters.query!.isNotEmpty) {

@@ -370,9 +370,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           width: double.minPositive,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: 7,
+            itemCount: 6, // Days 1-6 (skip day 7 - no vocabulary)
             itemBuilder: (context, index) {
-              final day = index + 1;
+              final day = index + 1; // Days 1-6
               return ListTile(
                 title: Text('Day $day'),
                 selected: _selectedDay == day,
