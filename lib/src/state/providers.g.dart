@@ -60,7 +60,7 @@ final class DatabaseProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'databaseProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -88,7 +88,7 @@ final class DatabaseProvider extends $FunctionalProvider<
   }
 }
 
-String _$databaseHash() => r'535e41f3a606825f5cc8c740e872d0ac428e3699';
+String _$databaseHash() => r'9994bf141ef8ca5e58749c191754a7f9a3058879';
 
 @ProviderFor(repository)
 final repositoryProvider = RepositoryProvider._();
@@ -131,144 +131,59 @@ final class RepositoryProvider extends $FunctionalProvider<
   }
 }
 
-String _$repositoryHash() => r'dfcf98214315751022601a6a3c31f3666394ce4a';
+String _$repositoryHash() => r'2f4f4563692d86dfec167bf36ef4c90ecf0e6b44';
 
-@ProviderFor(VocabularyStore)
-final vocabularyStoreProvider = VocabularyStoreProvider._();
+@ProviderFor(vocabularyActions)
+final vocabularyActionsProvider = VocabularyActionsProvider._();
 
-final class VocabularyStoreProvider
-    extends $AsyncNotifierProvider<VocabularyStore, List<Vocabulary>> {
-  VocabularyStoreProvider._()
+final class VocabularyActionsProvider extends $FunctionalProvider<
+    VocabularyActions,
+    VocabularyActions,
+    VocabularyActions> with $Provider<VocabularyActions> {
+  VocabularyActionsProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'vocabularyStoreProvider',
-          isAutoDispose: true,
+          name: r'vocabularyActionsProvider',
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$vocabularyStoreHash();
+  String debugGetCreateSourceHash() => _$vocabularyActionsHash();
 
   @$internal
   @override
-  VocabularyStore create() => VocabularyStore();
-}
-
-String _$vocabularyStoreHash() => r'581207311a7e2483126c9060e4743ea0b02fff8a';
-
-abstract class _$VocabularyStore extends $AsyncNotifier<List<Vocabulary>> {
-  FutureOr<List<Vocabulary>> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final ref =
-        this.ref as $Ref<AsyncValue<List<Vocabulary>>, List<Vocabulary>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AsyncValue<List<Vocabulary>>, List<Vocabulary>>,
-        AsyncValue<List<Vocabulary>>,
-        Object?,
-        Object?>;
-    element.handleCreate(ref, build);
-  }
-}
-
-@ProviderFor(allVocabularyValue)
-final allVocabularyValueProvider = AllVocabularyValueProvider._();
-
-final class AllVocabularyValueProvider extends $FunctionalProvider<
-    List<Vocabulary>?,
-    List<Vocabulary>?,
-    List<Vocabulary>?> with $Provider<List<Vocabulary>?> {
-  AllVocabularyValueProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'allVocabularyValueProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$allVocabularyValueHash();
-
-  @$internal
-  @override
-  $ProviderElement<List<Vocabulary>?> $createElement(
+  $ProviderElement<VocabularyActions> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  List<Vocabulary>? create(Ref ref) {
-    return allVocabularyValue(ref);
+  VocabularyActions create(Ref ref) {
+    return vocabularyActions(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<Vocabulary>? value) {
+  Override overrideWithValue(VocabularyActions value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<Vocabulary>?>(value),
+      providerOverride: $SyncValueProvider<VocabularyActions>(value),
     );
   }
 }
 
-String _$allVocabularyValueHash() =>
-    r'394faf24a90bc41736e4ad4116643d25567797b2';
-
-@ProviderFor(favouriteVocabularyValue)
-final favouriteVocabularyValueProvider = FavouriteVocabularyValueProvider._();
-
-final class FavouriteVocabularyValueProvider extends $FunctionalProvider<
-    List<Vocabulary>,
-    List<Vocabulary>,
-    List<Vocabulary>> with $Provider<List<Vocabulary>> {
-  FavouriteVocabularyValueProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'favouriteVocabularyValueProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$favouriteVocabularyValueHash();
-
-  @$internal
-  @override
-  $ProviderElement<List<Vocabulary>> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  List<Vocabulary> create(Ref ref) {
-    return favouriteVocabularyValue(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<Vocabulary> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<Vocabulary>>(value),
-    );
-  }
-}
-
-String _$favouriteVocabularyValueHash() =>
-    r'61ad618a953153f51d6bcabc1d9d17875e7cab53';
+String _$vocabularyActionsHash() => r'5a5d8cadf44a76ae0e53a60cb3258800fced590d';
 
 @ProviderFor(favouriteVocabulary)
 final favouriteVocabularyProvider = FavouriteVocabularyProvider._();
 
 final class FavouriteVocabularyProvider extends $FunctionalProvider<
-    AsyncValue<List<Vocabulary>>,
-    AsyncValue<List<Vocabulary>>,
-    AsyncValue<List<Vocabulary>>> with $Provider<AsyncValue<List<Vocabulary>>> {
+        AsyncValue<List<Vocabulary>>,
+        List<Vocabulary>,
+        FutureOr<List<Vocabulary>>>
+    with $FutureModifier<List<Vocabulary>>, $FutureProvider<List<Vocabulary>> {
   FavouriteVocabularyProvider._()
       : super(
           from: null,
@@ -285,34 +200,25 @@ final class FavouriteVocabularyProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<AsyncValue<List<Vocabulary>>> $createElement(
+  $FutureProviderElement<List<Vocabulary>> $createElement(
           $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+      $FutureProviderElement(pointer);
 
   @override
-  AsyncValue<List<Vocabulary>> create(Ref ref) {
+  FutureOr<List<Vocabulary>> create(Ref ref) {
     return favouriteVocabulary(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AsyncValue<List<Vocabulary>> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AsyncValue<List<Vocabulary>>>(value),
-    );
   }
 }
 
 String _$favouriteVocabularyHash() =>
-    r'54d3f0ed7fe3a5e119fd6fb59eb7044ec8dd023f';
+    r'92a1e367c3d93ea9693061a89c58f68b8be505d2';
 
 @ProviderFor(vocabularyById)
 final vocabularyByIdProvider = VocabularyByIdFamily._();
 
 final class VocabularyByIdProvider extends $FunctionalProvider<
-    AsyncValue<Vocabulary?>,
-    AsyncValue<Vocabulary?>,
-    AsyncValue<Vocabulary?>> with $Provider<AsyncValue<Vocabulary?>> {
+        AsyncValue<Vocabulary?>, Vocabulary?, FutureOr<Vocabulary?>>
+    with $FutureModifier<Vocabulary?>, $FutureProvider<Vocabulary?> {
   VocabularyByIdProvider._(
       {required VocabularyByIdFamily super.from, required int super.argument})
       : super(
@@ -335,24 +241,16 @@ final class VocabularyByIdProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<AsyncValue<Vocabulary?>> $createElement(
+  $FutureProviderElement<Vocabulary?> $createElement(
           $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+      $FutureProviderElement(pointer);
 
   @override
-  AsyncValue<Vocabulary?> create(Ref ref) {
+  FutureOr<Vocabulary?> create(Ref ref) {
     final argument = this.argument as int;
     return vocabularyById(
       ref,
       argument,
-    );
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AsyncValue<Vocabulary?> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AsyncValue<Vocabulary?>>(value),
     );
   }
 
@@ -367,10 +265,10 @@ final class VocabularyByIdProvider extends $FunctionalProvider<
   }
 }
 
-String _$vocabularyByIdHash() => r'85145cbb876a2fc244aa5ad56130336215677713';
+String _$vocabularyByIdHash() => r'19f74c31c0326c0764c082e2708bd5c02fcc86c1';
 
 final class VocabularyByIdFamily extends $Family
-    with $FunctionalFamilyOverride<AsyncValue<Vocabulary?>, int> {
+    with $FunctionalFamilyOverride<FutureOr<Vocabulary?>, int> {
   VocabularyByIdFamily._()
       : super(
           retry: null,
@@ -389,58 +287,64 @@ final class VocabularyByIdFamily extends $Family
   String toString() => r'vocabularyByIdProvider';
 }
 
-@ProviderFor(vocabularyByIdValue)
-final vocabularyByIdValueProvider = VocabularyByIdValueFamily._();
+/// Retrieve questions by week and day
 
-final class VocabularyByIdValueProvider
-    extends $FunctionalProvider<Vocabulary?, Vocabulary?, Vocabulary?>
-    with $Provider<Vocabulary?> {
-  VocabularyByIdValueProvider._(
-      {required VocabularyByIdValueFamily super.from,
-      required int super.argument})
+@ProviderFor(questionsByWeekAndDay)
+final questionsByWeekAndDayProvider = QuestionsByWeekAndDayFamily._();
+
+/// Retrieve questions by week and day
+
+final class QuestionsByWeekAndDayProvider extends $FunctionalProvider<
+        AsyncValue<List<Question>>, List<Question>, FutureOr<List<Question>>>
+    with $FutureModifier<List<Question>>, $FutureProvider<List<Question>> {
+  /// Retrieve questions by week and day
+  QuestionsByWeekAndDayProvider._(
+      {required QuestionsByWeekAndDayFamily super.from,
+      required (
+        int,
+        int,
+      )
+          super.argument})
       : super(
           retry: null,
-          name: r'vocabularyByIdValueProvider',
+          name: r'questionsByWeekAndDayProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$vocabularyByIdValueHash();
+  String debugGetCreateSourceHash() => _$questionsByWeekAndDayHash();
 
   @override
   String toString() {
-    return r'vocabularyByIdValueProvider'
+    return r'questionsByWeekAndDayProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
   @override
-  $ProviderElement<Vocabulary?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $FutureProviderElement<List<Question>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Vocabulary? create(Ref ref) {
-    final argument = this.argument as int;
-    return vocabularyByIdValue(
-      ref,
-      argument,
+  FutureOr<List<Question>> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      int,
     );
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Vocabulary? value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<Vocabulary?>(value),
+    return questionsByWeekAndDay(
+      ref,
+      argument.$1,
+      argument.$2,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is VocabularyByIdValueProvider && other.argument == argument;
+    return other is QuestionsByWeekAndDayProvider && other.argument == argument;
   }
 
   @override
@@ -449,27 +353,41 @@ final class VocabularyByIdValueProvider
   }
 }
 
-String _$vocabularyByIdValueHash() =>
-    r'e7725fb1ab0b0329208f60a91fd306f8c436c270';
+String _$questionsByWeekAndDayHash() =>
+    r'c089b06ae3d41b19bc9c9ff0d63cd3c7abf5375b';
 
-final class VocabularyByIdValueFamily extends $Family
-    with $FunctionalFamilyOverride<Vocabulary?, int> {
-  VocabularyByIdValueFamily._()
+/// Retrieve questions by week and day
+
+final class QuestionsByWeekAndDayFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<List<Question>>,
+            (
+              int,
+              int,
+            )> {
+  QuestionsByWeekAndDayFamily._()
       : super(
           retry: null,
-          name: r'vocabularyByIdValueProvider',
+          name: r'questionsByWeekAndDayProvider',
           dependencies: null,
           $allTransitiveDependencies: null,
           isAutoDispose: true,
         );
 
-  VocabularyByIdValueProvider call(
-    int vocabularyId,
+  /// Retrieve questions by week and day
+
+  QuestionsByWeekAndDayProvider call(
+    int week,
+    int day,
   ) =>
-      VocabularyByIdValueProvider._(argument: vocabularyId, from: this);
+      QuestionsByWeekAndDayProvider._(argument: (
+        week,
+        day,
+      ), from: this);
 
   @override
-  String toString() => r'vocabularyByIdValueProvider';
+  String toString() => r'questionsByWeekAndDayProvider';
 }
 
 @ProviderFor(LessonSelection)
@@ -496,7 +414,7 @@ final class LessonSelectionProvider
   LessonSelection create() => LessonSelection();
 }
 
-String _$lessonSelectionHash() => r'7f35b7b11db6e4b0892fd04464743b0deb0f6d57';
+String _$lessonSelectionHash() => r'183408e98e30850df6bc0caf0fe338e5dd7ec188';
 
 abstract class _$LessonSelection extends $AsyncNotifier<LessonSelectionData> {
   FutureOr<LessonSelectionData> build();

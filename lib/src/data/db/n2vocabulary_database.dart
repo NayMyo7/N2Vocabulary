@@ -56,10 +56,6 @@ class N2VocabularyDatabase {
       await db.execute(
         'CREATE INDEX IF NOT EXISTS idx_vocabulary_week ON Vocabulary(WEEK)',
       );
-      // Composite index for search optimization
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_vocabulary_search ON Vocabulary(KANJI, FURIGANA)',
-      );
     } catch (e) {
       // Indexes might already exist, ignore errors
       debugPrint('Index creation note: $e');

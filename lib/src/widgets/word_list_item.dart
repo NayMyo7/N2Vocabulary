@@ -64,7 +64,8 @@ class WordTrailingActions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch the vocabulary store to get the latest favourite status
-    final currentWord = ref.watch(vocabularyByIdValueProvider(word.id)) ?? word;
+    final currentWordAsync = ref.watch(vocabularyByIdProvider(word.id));
+    final currentWord = currentWordAsync.value ?? word;
 
     return SizedBox(
       width: AppSizes.trailingWidth,
@@ -90,7 +91,7 @@ class WordTrailingActions extends ConsumerWidget {
                     : AppColors.favouriteInactive,
               ),
               onPressed: () => ref
-                  .read(vocabularyStoreProvider.notifier)
+                  .read(vocabularyActionsProvider)
                   .toggleFavourite(currentWord),
             ),
           ),

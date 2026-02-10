@@ -1,10 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/db/n2vocabulary_database.dart';
 import '../data/repositories/n2vocabulary_repository.dart';
+import '../domain/models/question.dart';
 import '../domain/models/vocabulary.dart';
+import '../features/home/home_providers.dart';
 
 part 'providers.g.dart';
 
@@ -13,7 +14,7 @@ Future<SharedPreferences> sharedPreferences(Ref ref) async {
   return SharedPreferences.getInstance();
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 N2VocabularyDatabase database(Ref ref) {
   final db = N2VocabularyDatabase();
   ref.onDispose(db.close);
@@ -22,15 +23,19 @@ N2VocabularyDatabase database(Ref ref) {
 
 @riverpod
 N2VocabularyRepository repository(Ref ref) {
-  return N2VocabularyRepository(ref.watch(databaseProvider));
+  final db = ref.watch(databaseProvider);
+  return N2VocabularyRepository(db);
 }
 
-@riverpod
-class VocabularyStore extends _$VocabularyStore {
-  @override
-  Future<List<Vocabulary>> build() async {
-    return ref.watch(repositoryProvider).retrieveAllVocabulary();
-  }
+@Riverpod(keepAlive: true)
+VocabularyActions vocabularyActions(Ref ref) {
+  return VocabularyActions(ref);
+}
+
+class VocabularyActions {
+  VocabularyActions(this.ref);
+
+  final Ref ref;
 
   Future<void> toggleFavourite(Vocabulary vocabulary) async {
     final repo = ref.read(repositoryProvider);
@@ -41,74 +46,36 @@ class VocabularyStore extends _$VocabularyStore {
       await repo.markFavourite(vocabulary.id);
     }
 
-    final current = switch (state) {
-      AsyncData(:final value) => value,
-      _ => null,
-    };
-    if (current == null) {
-      state = AsyncData(await repo.retrieveAllVocabulary());
-      return;
-    }
-
-    state = AsyncData(
-      current
-          .map(
-            (v) => v.id == vocabulary.id
-                ? v.copyWith(favourite: vocabulary.isFavourite ? 0 : 1)
-                : v,
-          )
-          .toList(growable: false),
-    );
+    // Invalidate dependent providers to refresh their data
+    ref.invalidate(favouriteVocabularyProvider);
+    ref.invalidate(vocabularyByIdProvider(vocabulary.id));
+    // Invalidate vocabulary data for the specific week/day to refresh Study/FlashCard tabs
+    ref.invalidate(
+        vocabularyByWeekDayProvider(vocabulary.week, vocabulary.day));
   }
 }
 
 @riverpod
-List<Vocabulary>? allVocabularyValue(Ref ref) {
-  return ref.watch(vocabularyStoreProvider.select((v) => switch (v) {
-        AsyncData(:final value) => value,
-        _ => null,
-      }));
+Future<List<Vocabulary>> favouriteVocabulary(Ref ref) async {
+  final repository = ref.read(repositoryProvider);
+  return repository.retrieveFavouriteVocabulary();
 }
 
 @riverpod
-List<Vocabulary> favouriteVocabularyValue(Ref ref) {
-  final vocabulary = ref.watch(allVocabularyValueProvider);
-  if (vocabulary == null) return const <Vocabulary>[];
-  return vocabulary.where((v) => v.isFavourite).toList(growable: false);
+Future<Vocabulary?> vocabularyById(Ref ref, int vocabularyId) async {
+  final repository = ref.read(repositoryProvider);
+  return repository.retrieveVocabularyById(vocabularyId);
 }
 
+/// Retrieve questions by week and day
 @riverpod
-AsyncValue<List<Vocabulary>> favouriteVocabulary(Ref ref) {
-  final all = ref.watch(vocabularyStoreProvider);
-  return all.whenData(
-    (vocabulary) =>
-        vocabulary.where((v) => v.isFavourite).toList(growable: false),
-  );
-}
-
-@riverpod
-AsyncValue<Vocabulary?> vocabularyById(Ref ref, int vocabularyId) {
-  final all = ref.watch(vocabularyStoreProvider);
-  return all.whenData((vocabulary) {
-    for (final v in vocabulary) {
-      if (v.id == vocabularyId) return v;
-    }
-    return null;
-  });
-}
-
-@riverpod
-Vocabulary? vocabularyByIdValue(Ref ref, int vocabularyId) {
-  final vocabulary =
-      ref.watch(vocabularyStoreProvider.select((v) => switch (v) {
-            AsyncData(:final value) => value,
-            _ => null,
-          }));
-  if (vocabulary == null) return null;
-  for (final v in vocabulary) {
-    if (v.id == vocabularyId) return v;
-  }
-  return null;
+Future<List<Question>> questionsByWeekAndDay(
+  Ref ref,
+  int week,
+  int day,
+) async {
+  final repository = ref.read(repositoryProvider);
+  return repository.retrieveQuestionsByWeekAndDay(week, day);
 }
 
 class LessonSelectionData {

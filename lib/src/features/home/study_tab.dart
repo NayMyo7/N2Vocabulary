@@ -14,13 +14,19 @@ class StudyTab extends ConsumerWidget {
     final dayWordsAsync = ref.watch(dayWordsProvider);
 
     return dayWordsAsync.when(
-      data: (dayWords) => WordListView(
-        words: dayWords,
-        emptyText: 'No vocabulary.',
-        onWordLongPress: (vocab) => WordInfoSnackBar.show(context, vocab),
-      ),
-      error: (e, st) => ErrorView(message: e.toString()),
-      loading: () => const LoadingIndicator(),
+      data: (dayWords) {
+        return WordListView(
+          words: dayWords,
+          emptyText: 'No vocabulary.',
+          onWordLongPress: (vocab) => WordInfoSnackBar.show(context, vocab),
+        );
+      },
+      error: (e, st) {
+        return ErrorView(message: e.toString());
+      },
+      loading: () {
+        return const LoadingIndicator();
+      },
     );
   }
 }

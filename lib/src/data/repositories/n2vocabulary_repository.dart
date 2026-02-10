@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../../domain/models/paginated_result.dart';
 import '../../domain/models/question.dart';
 import '../../domain/models/vocabulary.dart';
@@ -8,12 +9,6 @@ class N2VocabularyRepository {
 
   final N2VocabularyDatabase _db;
 
-  /// Retrieve all vocabulary items
-  Future<List<Vocabulary>> retrieveAllVocabulary() async {
-    final rows = await _db.rawQuery('SELECT * FROM Vocabulary');
-    return rows.map(Vocabulary.fromRow).toList(growable: false);
-  }
-
   /// Retrieve paginated vocabulary with optional search filters
   Future<PaginatedResult<Vocabulary>> retrieveVocabularyPaginated({
     required PaginationParams pagination,
@@ -21,6 +16,15 @@ class N2VocabularyRepository {
   }) async {
     final whereConditions = <String>[];
     final whereArgs = <Object?>[];
+
+    // Debug: Check if we have any data at all
+    if (filters.week != null && filters.day != null) {
+      final testResult = await _db.rawQuery(
+          'SELECT COUNT(*) as count FROM Vocabulary WHERE WEEK = ? AND DAY = ?',
+          [filters.week!, filters.day!]);
+      debugPrint(
+          'Database count for week ${filters.week}, day ${filters.day}: ${testResult.first['count']}');
+    }
 
     // Build WHERE clause based on filters
     if (filters.favouritesOnly) {
@@ -84,7 +88,6 @@ class N2VocabularyRepository {
     return rows.map(Vocabulary.fromRow).toList(growable: false);
   }
 
-  /// Retrieve paginated favourite vocabulary
   Future<PaginatedResult<Vocabulary>> retrieveFavouriteVocabularyPaginated({
     required PaginationParams pagination,
   }) async {
@@ -108,6 +111,16 @@ class N2VocabularyRepository {
       [1],
     );
     return result.first['count'] as int;
+  }
+
+  /// Retrieve vocabulary by ID
+  Future<Vocabulary?> retrieveVocabularyById(int id) async {
+    final rows = await _db.rawQuery(
+      'SELECT * FROM Vocabulary WHERE ID = ?',
+      [id],
+    );
+    if (rows.isEmpty) return null;
+    return Vocabulary.fromRow(rows.first);
   }
 
   Future<void> markFavourite(int id) async {

@@ -32,7 +32,6 @@ class _QuizTabState extends ConsumerState<QuizTab> {
   bool _showingResult = false;
 
   List<Question> _dayQuestions = [];
-  bool _questionsLoaded = false;
 
   bool get _hasProgress => _questionCount > 0 || _answered || _selected != null;
 
@@ -312,38 +311,19 @@ class _QuizTabState extends ConsumerState<QuizTab> {
   @override
   void initState() {
     super.initState();
-    // Use ref.listen for lifecycle-aware provider watching
-    ref.listenManual(
-      lessonSelectionProvider,
-      (previous, next) {
-        if (next.hasValue) {
-          _loadQuestions(next.value!.week, next.value!.day);
-        }
-      },
-      fireImmediately: true,
-    );
   }
 
-  Future<void> _loadQuestions(int week, int day) async {
-    try {
-      final repo = ref.read(repositoryProvider);
-      final questions = await repo.retrieveQuestionsByWeekAndDay(week, day);
-
-      if (mounted) {
-        setState(() {
-          _dayQuestions = questions;
-          _questionsLoaded = true;
-        });
-        _rebuildDeck();
-        _newQuestion();
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _dayQuestions = [];
-          _questionsLoaded = true;
-        });
-      }
+  void _initializeQuestions(List<Question> questions) {
+    if (_dayQuestions != questions) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _dayQuestions = questions;
+          });
+          _rebuildDeck();
+          _newQuestion();
+        }
+      });
     }
   }
 
@@ -413,18 +393,40 @@ class _QuizTabState extends ConsumerState<QuizTab> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_questionsLoaded) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    final selectionAsync = ref.watch(lessonSelectionProvider);
 
-    if (_dayQuestions.isEmpty) {
-      return const Center(child: Text('No questions available for this day.'));
-    }
+    return selectionAsync.when(
+      data: (selection) {
+        final questionsAsync = ref.watch(
+          questionsByWeekAndDayProvider(selection.week, selection.day),
+        );
 
-    if (_options.isEmpty || _currentQuestion == null) {
-      return const Center(child: Text('Preparing quiz...'));
-    }
+        return questionsAsync.when(
+          data: (questions) {
+            _initializeQuestions(questions);
 
+            if (questions.isEmpty) {
+              return const Center(
+                child: Text('No questions available for this day.'),
+              );
+            }
+
+            if (_options.isEmpty || _currentQuestion == null) {
+              return const Center(child: Text('Preparing quiz...'));
+            }
+
+            return _buildQuizContent(context);
+          },
+          error: (e, st) => Center(child: Text('Error loading questions: $e')),
+          loading: () => const Center(child: CircularProgressIndicator()),
+        );
+      },
+      error: (e, st) => Center(child: Text('Error: $e')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _buildQuizContent(BuildContext context) {
     final correctAnswer = _currentQuestion!.correctAnswer;
     final questionText = _currentQuestion!.question;
     const prompt = 'Select the correct answer';
