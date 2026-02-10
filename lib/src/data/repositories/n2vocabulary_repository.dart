@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../../domain/models/paginated_result.dart';
 import '../../domain/models/question.dart';
 import '../../domain/models/vocabulary.dart';
@@ -16,15 +15,6 @@ class N2VocabularyRepository {
   }) async {
     final whereConditions = <String>[];
     final whereArgs = <Object?>[];
-
-    // Debug: Check if we have any data at all
-    if (filters.week != null && filters.day != null) {
-      final testResult = await _db.rawQuery(
-          'SELECT COUNT(*) as count FROM Vocabulary WHERE WEEK = ? AND DAY = ?',
-          [filters.week!, filters.day!]);
-      debugPrint(
-          'Database count for week ${filters.week}, day ${filters.day}: ${testResult.first['count']}');
-    }
 
     // Build WHERE clause based on filters
     if (filters.favouritesOnly) {
@@ -141,21 +131,6 @@ class N2VocabularyRepository {
     );
   }
 
-  /// Retrieve all questions
-  Future<List<Question>> retrieveAllQuestions() async {
-    final rows = await _db.rawQuery('SELECT * FROM Question ORDER BY ID');
-    return rows.map(Question.fromRow).toList(growable: false);
-  }
-
-  /// Retrieve questions by week
-  Future<List<Question>> retrieveQuestionsByWeek(int week) async {
-    final rows = await _db.rawQuery(
-      'SELECT * FROM Question WHERE WEEK = ? ORDER BY QUESTION_NO',
-      [week],
-    );
-    return rows.map(Question.fromRow).toList(growable: false);
-  }
-
   /// Retrieve questions by week and day
   Future<List<Question>> retrieveQuestionsByWeekAndDay(
     int week,
@@ -166,11 +141,5 @@ class N2VocabularyRepository {
       [week, day],
     );
     return rows.map(Question.fromRow).toList(growable: false);
-  }
-
-  /// Get total question count
-  Future<int> getTotalQuestionCount() async {
-    final result = await _db.rawQuery('SELECT COUNT(*) as count FROM Question');
-    return result.first['count'] as int;
   }
 }
