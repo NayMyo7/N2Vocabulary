@@ -11,8 +11,8 @@ abstract final class AppSizes {
 
   static const double radiusSm = 8;
 
-  static const double listTileHorizontalPadding = 16;
-  static const double listTileVerticalPadding = 8;
+  static const double listTileHorizontalPadding = 20;
+  static const double listTileVerticalPadding = 2;
 
   static const double trailingWidth = 28;
   static const double iconButtonBox = 24;

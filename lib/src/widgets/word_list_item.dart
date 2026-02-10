@@ -27,14 +27,14 @@ class WordListItem extends ConsumerWidget {
           FuriganaText(
             word.japanese,
             baseStyle: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
-              letterSpacing: 0.2,
+              letterSpacing: 0.5,
             ),
             furiganaStyle: const TextStyle(
               fontSize: 10,
-              color: AppColors.primary,
+              color: Colors.black87,
               height: 1.5,
             ),
             textAlign: TextAlign.left,
@@ -45,7 +45,7 @@ class WordListItem extends ConsumerWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 16,
               color: Color(0xFF212121),
             ),
           ),
