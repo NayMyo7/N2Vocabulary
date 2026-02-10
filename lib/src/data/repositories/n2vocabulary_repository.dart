@@ -48,20 +48,30 @@ class N2VocabularyRepository {
     final whereClause =
         whereConditions.isEmpty ? '' : 'WHERE ${whereConditions.join(' AND ')}';
 
-    // Get total count
-    final countResult = await _db.rawQuery(
-      'SELECT COUNT(*) as count FROM Vocabulary $whereClause',
-      whereArgs,
-    );
-    final totalCount = countResult.first['count'] as int;
+    // Use a single query with window functions to get both count and data
+    final rows = await _db.rawQuery('''
+      SELECT *, COUNT(*) OVER() as total_count 
+      FROM Vocabulary $whereClause 
+      ORDER BY ID 
+      LIMIT ? OFFSET ?
+    ''', [...whereArgs, pagination.limit, pagination.offset]);
 
-    // Get paginated results
-    final rows = await _db.rawQuery(
-      'SELECT * FROM Vocabulary $whereClause ORDER BY ID LIMIT ? OFFSET ?',
-      [...whereArgs, pagination.limit, pagination.offset],
-    );
+    if (rows.isEmpty) {
+      return PaginatedResult(
+        items: [],
+        totalCount: 0,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+      );
+    }
 
-    final items = rows.map(Vocabulary.fromRow).toList(growable: false);
+    final totalCount = rows.first['total_count'] as int;
+    final items = rows.map((row) {
+      // Remove total_count from the row before mapping to Vocabulary
+      final modifiedRow = Map<String, dynamic>.from(row);
+      modifiedRow.remove('total_count');
+      return Vocabulary.fromRow(modifiedRow);
+    }).toList(growable: false);
 
     return PaginatedResult(
       items: items,
@@ -71,13 +81,7 @@ class N2VocabularyRepository {
     );
   }
 
-  /// Retrieve favourite vocabulary items
-  Future<List<Vocabulary>> retrieveFavouriteVocabulary() async {
-    final rows =
-        await _db.rawQuery('SELECT * FROM Vocabulary WHERE FAVOURITE=?', [1]);
-    return rows.map(Vocabulary.fromRow).toList(growable: false);
-  }
-
+  /// Retrieve favourite vocabulary items with pagination
   Future<PaginatedResult<Vocabulary>> retrieveFavouriteVocabularyPaginated({
     required PaginationParams pagination,
   }) async {

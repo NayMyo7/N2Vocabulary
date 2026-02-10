@@ -211,7 +211,7 @@ final class FavouriteVocabularyProvider extends $FunctionalProvider<
 }
 
 String _$favouriteVocabularyHash() =>
-    r'92a1e367c3d93ea9693061a89c58f68b8be505d2';
+    r'22640fa7ed732d472ad9ca8458ed5aab6ae08397';
 
 @ProviderFor(vocabularyById)
 final vocabularyByIdProvider = VocabularyByIdFamily._();

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/db/n2vocabulary_database.dart';
 import '../data/repositories/n2vocabulary_repository.dart';
+import '../domain/models/paginated_result.dart';
 import '../domain/models/question.dart';
 import '../domain/models/vocabulary.dart';
 import '../features/home/home_providers.dart';
@@ -58,7 +59,11 @@ class VocabularyActions {
 @riverpod
 Future<List<Vocabulary>> favouriteVocabulary(Ref ref) async {
   final repository = ref.read(repositoryProvider);
-  return repository.retrieveFavouriteVocabulary();
+  final result = await repository.retrieveFavouriteVocabularyPaginated(
+    pagination: const PaginationParams(
+        pageSize: 1000), // Load all favourites with reasonable limit
+  );
+  return result.items;
 }
 
 @riverpod
