@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 import '../../core/core.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../domain/models/vocabulary.dart';
 
 /// Flashcards feature with clean state management
@@ -539,7 +540,9 @@ class _FlashCardFace extends StatelessWidget {
             Text(
               word.burmese,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: AppTextStyles.burmeseTextLarge.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         );
@@ -550,7 +553,10 @@ class _FlashCardFace extends StatelessWidget {
             Text(
               word.burmese,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: AppTextStyles.burmeseTextLarge.copyWith(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         );

@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: AppColors.textSecondary,
           backgroundColor: AppColors.background,
         ),
+        fontFamily: 'Roboto',
         textTheme: baseTextTheme
             .copyWith(
               displayLarge: baseTextTheme.displayLarge?.copyWith(
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
             .apply(
               bodyColor: AppColors.textPrimary,
               displayColor: AppColors.textPrimary,
+              fontFamily: 'Roboto',
             ),
       ),
       routerConfig: router,
