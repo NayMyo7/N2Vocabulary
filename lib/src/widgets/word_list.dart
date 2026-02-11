@@ -11,11 +11,13 @@ class WordListView extends ConsumerWidget {
     super.key,
     this.emptyText,
     this.onWordLongPress,
+    this.onToggleFavorite,
   });
 
   final List<Vocabulary> words;
   final String? emptyText;
   final void Function(Vocabulary word)? onWordLongPress;
+  final void Function(Vocabulary word)? onToggleFavorite;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,6 +36,7 @@ class WordListView extends ConsumerWidget {
           key: ValueKey(w.id),
           word: w,
           onLongPress: onWordLongPress,
+          onToggleFavorite: onToggleFavorite,
         );
       },
     );

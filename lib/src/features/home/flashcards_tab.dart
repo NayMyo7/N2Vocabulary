@@ -454,13 +454,20 @@ class _NavigationState {
     if (shuffleMode) {
       // Get cards not in history to avoid duplicates
       final historySet = history.toSet();
-      final availableCards = List.generate(
-        totalCards,
-        (i) => i,
-      ).where((i) => !historySet.contains(i)).toList();
 
-      if (availableCards.isNotEmpty) {
-        return availableCards[random.nextInt(availableCards.length)];
+      // More efficient: Check if we have unvisited cards without generating full list
+      if (historySet.length < totalCards) {
+        // Generate only the range we need
+        final availableCards = <int>[];
+        for (int i = 0; i < totalCards; i++) {
+          if (!historySet.contains(i)) {
+            availableCards.add(i);
+          }
+        }
+
+        if (availableCards.isNotEmpty) {
+          return availableCards[random.nextInt(availableCards.length)];
+        }
       }
 
       // All cards in history, pick random different from current

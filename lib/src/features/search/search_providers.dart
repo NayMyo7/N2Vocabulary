@@ -147,4 +147,26 @@ class PaginatedSearch extends _$PaginatedSearch {
   Future<void> clearFilters() async {
     await search();
   }
+
+  /// Update favorite status for a specific word in search results
+  void updateFavoriteStatus(int wordId, bool isFavourite) {
+    final currentItems = state.vocabulary;
+    final targetIndex = currentItems.indexWhere((word) => word.id == wordId);
+
+    if (targetIndex == -1) return; // Word not found, nothing to update
+
+    // Create a new list with only the target word updated (more efficient)
+    final updatedItems = List<Vocabulary>.from(currentItems);
+    updatedItems[targetIndex] =
+        currentItems[targetIndex].copyWith(favourite: isFavourite ? 1 : 0);
+
+    final updatedResult = PaginatedResult<Vocabulary>(
+      items: updatedItems,
+      totalCount: state.totalCount,
+      page: state.pagination.page,
+      pageSize: state.pagination.pageSize,
+    );
+
+    state = state.copyWith(result: updatedResult);
+  }
 }

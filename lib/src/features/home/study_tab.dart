@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
 import '../../domain/models/vocabulary.dart';
+import '../../state/providers.dart';
 import '../../utils/word_info_snackbar.dart';
 import '../../widgets/widgets.dart';
 import 'home_providers.dart';
@@ -106,6 +107,8 @@ class _StudyTabState extends ConsumerState<StudyTab> {
                 emptyText: 'No vocabulary.',
                 onWordLongPress: (vocab) =>
                     WordInfoSnackBar.show(context, vocab),
+                onToggleFavorite: (vocab) =>
+                    ref.read(vocabularyActionsProvider).toggleFavourite(vocab),
               ),
             ),
           ],

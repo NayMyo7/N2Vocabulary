@@ -18,6 +18,9 @@ class FuriganaText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow? overflow;
 
+  // Cache for parsed tokens to avoid repeated parsing
+  static final Map<String, List<_FuriganaToken>> _tokenCache = {};
+
   @override
   Widget build(BuildContext context) {
     final defaultBaseStyle = DefaultTextStyle.of(context).style;
@@ -29,7 +32,8 @@ class FuriganaText extends StatelessWidget {
           height: 1.0,
         );
 
-    final tokens = _parse(text);
+    // Use cached tokens if available
+    final tokens = _tokenCache.putIfAbsent(text, () => _parse(text));
     final hasRuby = tokens.any(
       (t) => t.reading != null && t.reading!.isNotEmpty,
     );

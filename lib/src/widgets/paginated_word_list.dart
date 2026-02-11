@@ -15,6 +15,7 @@ class PaginatedWordListView extends ConsumerStatefulWidget {
     super.key,
     this.emptyText,
     this.onWordLongPress,
+    this.onToggleFavorite,
   });
 
   final List<Vocabulary> words;
@@ -23,6 +24,7 @@ class PaginatedWordListView extends ConsumerStatefulWidget {
   final VoidCallback onLoadMore;
   final String? emptyText;
   final void Function(Vocabulary word)? onWordLongPress;
+  final void Function(Vocabulary word)? onToggleFavorite;
 
   @override
   ConsumerState<PaginatedWordListView> createState() =>
@@ -83,7 +85,11 @@ class _PaginatedWordListViewState extends ConsumerState<PaginatedWordListView> {
         }
 
         final w = widget.words[index];
-        return WordListItem(word: w, onLongPress: widget.onWordLongPress);
+        return WordListItem(
+          word: w,
+          onLongPress: widget.onWordLongPress,
+          onToggleFavorite: widget.onToggleFavorite,
+        );
       },
     );
   }

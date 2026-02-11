@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
+import '../../state/providers.dart';
 import '../../utils/word_info_snackbar.dart';
 import '../../widgets/widgets.dart';
 import 'search_providers.dart';
@@ -315,6 +316,17 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                                   emptyText: 'No results.',
                                   onWordLongPress: (word) =>
                                       WordInfoSnackBar.show(context, word),
+                                  onToggleFavorite: (word) {
+                                    // Update search results immediately
+                                    ref
+                                        .read(paginatedSearchProvider.notifier)
+                                        .updateFavoriteStatus(
+                                            word.id, !word.isFavourite);
+                                    // Then perform the actual toggle
+                                    ref
+                                        .read(vocabularyActionsProvider)
+                                        .toggleFavourite(word);
+                                  },
                                 ),
                         ),
                       ],

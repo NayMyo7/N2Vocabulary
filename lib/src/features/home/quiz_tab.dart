@@ -328,11 +328,13 @@ class _QuizTabState extends ConsumerState<QuizTab> {
   }
 
   void _rebuildDeck() {
-    final ids = _dayQuestions.map((q) => q.id).toList(growable: false);
-    ids.shuffle(_rng);
-    _deck = ids;
+    // More efficient: Create shuffled list directly
+    final shuffledQuestions = List<Question>.from(_dayQuestions);
+    shuffledQuestions.shuffle(_rng);
+
+    _deck = shuffledQuestions.map((q) => q.id).toList(growable: false);
     _deckIndex = 0;
-    _finished = ids.isEmpty;
+    _finished = _dayQuestions.isEmpty;
   }
 
   void _newQuestion() {

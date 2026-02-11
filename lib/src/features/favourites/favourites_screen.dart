@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../state/providers.dart';
 import '../../utils/word_info_snackbar.dart';
 import '../../widgets/widgets.dart';
 import 'favourites_providers.dart';
@@ -44,6 +45,16 @@ class _FavouritesScreenState extends ConsumerState<FavouritesScreen> {
                       emptyText: 'No favourites yet.',
                       onWordLongPress: (word) =>
                           WordInfoSnackBar.show(context, word),
+                      onToggleFavorite: (word) {
+                        // Update favorites results immediately
+                        ref
+                            .read(paginatedFavouritesProvider.notifier)
+                            .updateFavoriteStatus(word.id, !word.isFavourite);
+                        // Then perform the actual toggle
+                        ref
+                            .read(vocabularyActionsProvider)
+                            .toggleFavourite(word);
+                      },
                     ),
       bottomNavigationBar: const AdBanner(),
     );

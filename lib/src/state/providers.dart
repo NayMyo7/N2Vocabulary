@@ -6,6 +6,7 @@ import '../data/repositories/n2vocabulary_repository.dart';
 import '../domain/models/paginated_result.dart';
 import '../domain/models/question.dart';
 import '../domain/models/vocabulary.dart';
+import '../features/home/home_providers.dart';
 
 part 'providers.g.dart';
 
@@ -50,6 +51,20 @@ class VocabularyActions {
     // Invalidate dependent providers to refresh their data
     ref.invalidate(favouriteVocabularyProvider);
     ref.invalidate(vocabularyByIdProvider(vocabulary.id));
+    ref.invalidate(dayWordsProvider);
+
+    // Also invalidate the specific vocabularyByWeekDayProvider to ensure fresh data
+    final lessonSelection = ref.read(lessonSelectionProvider);
+    if (lessonSelection.hasValue) {
+      final selection = lessonSelection.value!;
+      ref.invalidate(
+          vocabularyByWeekDayProvider(selection.week, selection.day));
+    }
+    // Note: We don't invalidate all providers when loading as it's too expensive
+    // The dayWordsProvider invalidation will handle refreshing when needed
+
+    // Don't invalidate paginated providers to prevent list disappearing
+    // Search and favorites screens handle updates manually via updateFavoriteStatus
   }
 }
 
