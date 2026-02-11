@@ -8,10 +8,9 @@ final class AppProviderObserver extends ProviderObserver {
     ProviderObserverContext context,
     Object? value,
   ) {
-    if (kDebugMode) {
-      debugPrint(
-        '🟢 Provider added: ${context.provider.name ?? context.provider.runtimeType}',
-      );
+    // Only log in debug mode and limit verbosity
+    if (kDebugMode && context.provider.name != null) {
+      debugPrint('🟢 ${context.provider.name}');
     }
   }
 
@@ -21,10 +20,11 @@ final class AppProviderObserver extends ProviderObserver {
     Object? previousValue,
     Object? newValue,
   ) {
-    if (kDebugMode) {
-      debugPrint(
-        '🔄 Provider updated: ${context.provider.name ?? context.provider.runtimeType}',
-      );
+    // Reduce logging frequency for better performance
+    if (kDebugMode &&
+        context.provider.name != null &&
+        previousValue != newValue) {
+      debugPrint('🔄 ${context.provider.name}');
     }
   }
 
@@ -32,10 +32,9 @@ final class AppProviderObserver extends ProviderObserver {
   void didDisposeProvider(
     ProviderObserverContext context,
   ) {
-    if (kDebugMode) {
-      debugPrint(
-        '🔴 Provider disposed: ${context.provider.name ?? context.provider.runtimeType}',
-      );
+    // Minimal logging for better performance
+    if (kDebugMode && context.provider.name != null) {
+      debugPrint('🔴 ${context.provider.name}');
     }
   }
 
@@ -47,8 +46,7 @@ final class AppProviderObserver extends ProviderObserver {
   ) {
     debugPrint(
       '❌ Provider failed: ${context.provider.name ?? context.provider.runtimeType}\n'
-      'Error: $error\n'
-      'StackTrace: $stackTrace',
+      'Error: $error',
     );
 
     // In production, you would log this to a crash reporting service

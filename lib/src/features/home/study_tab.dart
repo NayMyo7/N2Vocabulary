@@ -111,11 +111,28 @@ class _StudyTabState extends ConsumerState<StudyTab> {
           ],
         );
       },
+      loading: () {
+        // Show immediate UI with loading indicator
+        return const Column(
+          children: [
+            // Placeholder word count row
+            SizedBox(
+              height: 60,
+              child: Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+            // Placeholder content
+            Expanded(
+              child: Center(
+                child: Text('Loading vocabulary...'),
+              ),
+            ),
+          ],
+        );
+      },
       error: (e, st) {
         return ErrorView(message: e.toString());
-      },
-      loading: () {
-        return const LoadingIndicator();
       },
     );
   }

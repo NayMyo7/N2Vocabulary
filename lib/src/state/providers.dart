@@ -9,8 +9,9 @@ import '../domain/models/vocabulary.dart';
 
 part 'providers.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<SharedPreferences> sharedPreferences(Ref ref) async {
+  // Cache SharedPreferences instance to avoid repeated initialization
   return SharedPreferences.getInstance();
 }
 
@@ -101,7 +102,7 @@ class LessonSelectionData {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LessonSelection extends _$LessonSelection {
   static const _kWeek = 'WEEK';
   static const _kDay = 'DAY';
@@ -109,6 +110,7 @@ class LessonSelection extends _$LessonSelection {
 
   @override
   Future<LessonSelectionData> build() async {
+    // Use cached SharedPreferences to avoid repeated initialization
     final prefs = await ref.watch(sharedPreferencesProvider.future);
     return LessonSelectionData(
       week: prefs.getInt(_kWeek) ?? 1,

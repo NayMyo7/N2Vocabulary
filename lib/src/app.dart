@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'core/theme/app_colors.dart';
 import 'router.dart';
@@ -9,7 +8,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GoRouter router = createRouter();
     final baseTextTheme = ThemeData.light().textTheme;
 
     return MaterialApp.router(
@@ -30,66 +28,21 @@ class MyApp extends StatelessWidget {
         ),
         dividerColor: AppColors.divider,
         hintColor: AppColors.textSecondary,
-        cardTheme: const CardThemeData(
-          color: AppColors.surface,
-          surfaceTintColor: Colors.transparent,
-        ),
+        fontFamily: 'Roboto',
+        // Fix AppBar background color
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.textOnPrimary,
           surfaceTintColor: AppColors.primary,
         ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textOnPrimary,
+        // Simplified text theme to improve startup performance
+        textTheme: baseTextTheme.apply(
+          bodyColor: AppColors.textPrimary,
+          displayColor: AppColors.textPrimary,
+          fontFamily: 'Roboto',
         ),
-        filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.textOnPrimary,
-          ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.textSecondary,
-          backgroundColor: AppColors.background,
-        ),
-        fontFamily: 'Roboto',
-        textTheme: baseTextTheme
-            .copyWith(
-              displayLarge: baseTextTheme.displayLarge?.copyWith(
-                fontSize: 48,
-                fontWeight: FontWeight.w800,
-              ),
-              displayMedium: baseTextTheme.displayMedium?.copyWith(
-                fontSize: 40,
-                fontWeight: FontWeight.w800,
-              ),
-              displaySmall: baseTextTheme.displaySmall?.copyWith(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-              ),
-              titleLarge: baseTextTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-              titleMedium: baseTextTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-              titleSmall: baseTextTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-              labelLarge: baseTextTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-              bodyMedium: baseTextTheme.bodyMedium?.copyWith(height: 1.2),
-            )
-            .apply(
-              bodyColor: AppColors.textPrimary,
-              displayColor: AppColors.textPrimary,
-              fontFamily: 'Roboto',
-            ),
       ),
-      routerConfig: router,
+      routerConfig: createRouter(),
     );
   }
 }

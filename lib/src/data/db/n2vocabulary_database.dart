@@ -51,12 +51,25 @@ class N2VocabularyDatabase {
       return dbFile;
     }
 
-    final bytes = await rootBundle.load(_assetDbPath);
-    final buffer = bytes.buffer;
-    await dbFile.writeAsBytes(
-      buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
-      flush: true,
-    );
+    // Copy database from assets in chunks to reduce memory pressure
+    final byteData = await rootBundle.load(_assetDbPath);
+    final buffer = byteData.buffer;
+
+    // Write in chunks to avoid large memory allocations
+    const chunkSize = 1024 * 1024; // 1MB chunks
+    final totalBytes = byteData.lengthInBytes;
+
+    final file = await dbFile.open(mode: FileMode.write);
+    try {
+      for (int offset = 0; offset < totalBytes; offset += chunkSize) {
+        final end = (offset + chunkSize).clamp(0, totalBytes);
+        final chunk =
+            buffer.asUint8List(byteData.offsetInBytes + offset, end - offset);
+        await file.writeFrom(chunk);
+      }
+    } finally {
+      await file.close();
+    }
 
     return dbFile;
   }

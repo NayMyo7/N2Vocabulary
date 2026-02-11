@@ -49,6 +49,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final selectionAsync = ref.watch(lessonSelectionProvider);
 
     return selectionAsync.when(
+      loading: () {
+        // Show immediate loading UI instead of white screen
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Loading...'),
+          ),
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+      error: (e, st) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('Error')),
+          body: ErrorView(message: e.toString()),
+        );
+      },
       data: (selection) {
         final title = widget._screenTitle(selection.week, selection.day);
         final isDay7 = selection.day == 7;
@@ -115,8 +132,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         );
       },
-      error: (e, st) => Scaffold(body: ErrorView(message: e.toString())),
-      loading: () => const Scaffold(body: LoadingIndicator()),
     );
   }
 }

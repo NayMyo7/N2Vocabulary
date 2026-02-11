@@ -8,16 +8,22 @@ import 'src/core/core.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  try {
-    await MobileAds.instance.initialize();
-  } catch (e) {
-    debugPrint('AdMob initialization failed: $e');
-  }
-
+  // Start app immediately, initialize services in background
   runApp(
     ProviderScope(
       observers: [AppProviderObserver()],
       child: const MyApp(),
     ),
   );
+
+  // Initialize AdMob in background without blocking app startup
+  MobileAds.instance
+      .initialize()
+      .timeout(
+        const Duration(seconds: 5),
+      )
+      .catchError((e) {
+    debugPrint('AdMob initialization failed: $e');
+    return e; // Return error to satisfy return type
+  });
 }
