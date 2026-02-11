@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -37,29 +36,7 @@ class N2VocabularyDatabase {
   Future<Database> _open() async {
     final dbFile = await _ensureDbFile();
     final db = await openDatabase(dbFile.path);
-    await _createIndexes(db);
     return db;
-  }
-
-  /// Create indexes for frequently queried columns to improve performance
-  Future<void> _createIndexes(Database db) async {
-    try {
-      // Index for favourite words query
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_vocabulary_favourite ON Vocabulary(FAVOURITE)',
-      );
-      // Index for day-based queries
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_vocabulary_day ON Vocabulary(DAY)',
-      );
-      // Index for week-based queries
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_vocabulary_week ON Vocabulary(WEEK)',
-      );
-    } catch (e) {
-      // Indexes might already exist, ignore errors
-      debugPrint('Index creation note: $e');
-    }
   }
 
   Future<File> _ensureDbFile() async {
