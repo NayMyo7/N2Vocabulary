@@ -39,7 +39,7 @@ class N2VocabularyRepository {
     if (filters.query != null && filters.query!.isNotEmpty) {
       final searchQuery = '%${filters.query!.toLowerCase()}%';
       whereConditions.add(
-        '(LOWER(KANJI) LIKE ? OR LOWER(FURIGANA) LIKE ? OR LOWER(BURMESE) LIKE ? OR LOWER(ENGLISH) LIKE ? OR LOWER(JAPANESE) LIKE ?)',
+        '(LOWER(KANJI) LIKE ? OR LOWER(FURIGANA) LIKE ? OR LOWER(BURMESE) LIKE ? OR LOWER(JAPANESE) LIKE ?)',
       );
       whereArgs.addAll(
           [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery]);
