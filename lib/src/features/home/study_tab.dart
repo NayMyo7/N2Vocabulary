@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,8 +15,8 @@ class StudyTab extends ConsumerStatefulWidget {
 }
 
 class _StudyTabState extends ConsumerState<StudyTab> {
-  List<String>? _originalWords;
   bool _isShuffled = false;
+  List<Vocabulary>? _shuffledWords;
 
   @override
   Widget build(BuildContext context) {
@@ -127,22 +125,21 @@ class _StudyTabState extends ConsumerState<StudyTab> {
       if (_isShuffled) {
         // Restore original order
         _isShuffled = false;
+        _shuffledWords = null;
       } else {
-        // Store original order and shuffle
-        _originalWords = dayWords.map((word) => word.id.toString()).toList();
+        // Store shuffled list once
+        _shuffledWords = List<Vocabulary>.from(dayWords)..shuffle();
         _isShuffled = true;
       }
     });
   }
 
   List<Vocabulary> _getWordsToDisplay(List<Vocabulary> dayWords) {
-    if (!_isShuffled || _originalWords == null) {
+    if (!_isShuffled || _shuffledWords == null) {
       return dayWords;
     }
 
-    // Create shuffled copy
-    final shuffled = List<Vocabulary>.from(dayWords);
-    shuffled.shuffle(Random());
-    return shuffled;
+    // Return the pre-shuffled list to maintain consistent order
+    return _shuffledWords!;
   }
 }

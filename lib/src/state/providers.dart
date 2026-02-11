@@ -6,7 +6,6 @@ import '../data/repositories/n2vocabulary_repository.dart';
 import '../domain/models/paginated_result.dart';
 import '../domain/models/question.dart';
 import '../domain/models/vocabulary.dart';
-import '../features/home/home_providers.dart';
 
 part 'providers.g.dart';
 
@@ -50,9 +49,6 @@ class VocabularyActions {
     // Invalidate dependent providers to refresh their data
     ref.invalidate(favouriteVocabularyProvider);
     ref.invalidate(vocabularyByIdProvider(vocabulary.id));
-    // Invalidate vocabulary data for the specific week/day to refresh Study/FlashCard tabs
-    ref.invalidate(
-        vocabularyByWeekDayProvider(vocabulary.week, vocabulary.day));
   }
 }
 
