@@ -173,6 +173,7 @@ class _FlashcardsTabState extends State<FlashcardsTab> {
       child: Row(
         children: [
           Expanded(
+            flex: 2,
             child: Text(
               'Words: ${_navState.currentIndex + 1}/${widget.words.length}',
               style: Theme.of(
@@ -181,11 +182,21 @@ class _FlashcardsTabState extends State<FlashcardsTab> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: TextButton.icon(
               onPressed: () => setState(() => _reverse = !_reverse),
-              icon: const Icon(Icons.swap_horiz),
+              icon: const Icon(Icons.swap_horiz, size: 18),
               label: Text(
-                  _reverse ? 'Meaning → Vocabulary' : 'Vocabulary → Meaning'),
+                _reverse ? 'Meaning→Vocabulary' : 'Vocabulary→Meaning',
+                style: const TextStyle(fontSize: 14),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
             ),
           ),
         ],
