@@ -41,8 +41,7 @@ class N2VocabularyRepository {
       whereConditions.add(
         '(LOWER(KANJI) LIKE ? OR LOWER(FURIGANA) LIKE ? OR LOWER(BURMESE) LIKE ? OR LOWER(JAPANESE) LIKE ?)',
       );
-      whereArgs.addAll(
-          [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery]);
+      whereArgs.addAll([searchQuery, searchQuery, searchQuery, searchQuery]);
     }
 
     final whereClause =
