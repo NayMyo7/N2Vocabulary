@@ -82,7 +82,8 @@ class _QuizTabState extends ConsumerState<QuizTab> {
   }
 
   Future<void> _showResultDialog() async {
-    final total = _questionCount == 0 ? _dayQuestions.length : _questionCount;
+    final total =
+        _dayQuestions.length; // Always use total questions for completed quiz
     final percent = total == 0 ? 0 : ((_score / total) * 100).round();
     final style = _resultStyleForScore(percent);
 
@@ -431,7 +432,6 @@ class _QuizTabState extends ConsumerState<QuizTab> {
   Widget _buildQuizContent(BuildContext context) {
     final correctAnswer = _currentQuestion!.correctAnswer;
     final questionText = _currentQuestion!.question;
-    const prompt = 'Select the correct answer';
 
     return Column(
       children: [
@@ -462,7 +462,7 @@ class _QuizTabState extends ConsumerState<QuizTab> {
                             text: '${_questionCount + 1}',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleLarge
+                                .titleMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w900,
                                   color: Theme.of(context).colorScheme.primary,
@@ -472,7 +472,17 @@ class _QuizTabState extends ConsumerState<QuizTab> {
                             text: '/${_dayQuestions.length}',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleLarge
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textPrimary,
+                                ),
+                          ),
+                          TextSpan(
+                            text: ' Select the correct answer',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.textPrimary,
@@ -497,7 +507,7 @@ class _QuizTabState extends ConsumerState<QuizTab> {
             child: LinearProgressIndicator(
               value: _dayQuestions.isEmpty
                   ? 0
-                  : (_questionCount) / _dayQuestions.length,
+                  : (_questionCount + 1) / _dayQuestions.length,
               minHeight: 6,
               backgroundColor: Theme.of(
                 context,
@@ -521,13 +531,6 @@ class _QuizTabState extends ConsumerState<QuizTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    prompt,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
-                        ),
-                  ),
                   const SizedBox(height: AppSizes.radiusSm),
                   Text(
                     questionText,
