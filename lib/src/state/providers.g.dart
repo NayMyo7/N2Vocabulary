@@ -25,7 +25,7 @@ final class SharedPreferencesProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'sharedPreferencesProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -45,7 +45,7 @@ final class SharedPreferencesProvider extends $FunctionalProvider<
   }
 }
 
-String _$sharedPreferencesHash() => r'6c03b929f567eb6f97608f6208b95744ffee3bfd';
+String _$sharedPreferencesHash() => r'50d46e3f8d9f32715d0f3efabdce724e4b2593b4';
 
 @ProviderFor(database)
 final databaseProvider = DatabaseProvider._();
@@ -175,43 +175,6 @@ final class VocabularyActionsProvider extends $FunctionalProvider<
 }
 
 String _$vocabularyActionsHash() => r'5a5d8cadf44a76ae0e53a60cb3258800fced590d';
-
-@ProviderFor(favouriteVocabulary)
-final favouriteVocabularyProvider = FavouriteVocabularyProvider._();
-
-final class FavouriteVocabularyProvider extends $FunctionalProvider<
-        AsyncValue<List<Vocabulary>>,
-        List<Vocabulary>,
-        FutureOr<List<Vocabulary>>>
-    with $FutureModifier<List<Vocabulary>>, $FutureProvider<List<Vocabulary>> {
-  FavouriteVocabularyProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'favouriteVocabularyProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$favouriteVocabularyHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<List<Vocabulary>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<Vocabulary>> create(Ref ref) {
-    return favouriteVocabulary(ref);
-  }
-}
-
-String _$favouriteVocabularyHash() =>
-    r'22640fa7ed732d472ad9ca8458ed5aab6ae08397';
 
 @ProviderFor(vocabularyById)
 final vocabularyByIdProvider = VocabularyByIdFamily._();
@@ -401,7 +364,7 @@ final class LessonSelectionProvider
           argument: null,
           retry: null,
           name: r'lessonSelectionProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -414,7 +377,7 @@ final class LessonSelectionProvider
   LessonSelection create() => LessonSelection();
 }
 
-String _$lessonSelectionHash() => r'183408e98e30850df6bc0caf0fe338e5dd7ec188';
+String _$lessonSelectionHash() => r'54437a8b57590ae9e218462c32e8911339ba633a';
 
 abstract class _$LessonSelection extends $AsyncNotifier<LessonSelectionData> {
   FutureOr<LessonSelectionData> build();

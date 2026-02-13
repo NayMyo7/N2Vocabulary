@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
-import '../../state/providers.dart';
+import '../../domain/models/vocabulary.dart';
+import '../../state/vocabulary_state_notifier.dart';
 import '../../utils/word_info_snackbar.dart';
 import '../../widgets/widgets.dart';
-import 'search_providers.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -20,6 +20,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   int? _selectedDay;
   bool _favouritesOnly = false;
   bool _shuffled = false;
+  List<Vocabulary>? _shuffledWords;
 
   final _controller = TextEditingController();
 
@@ -39,7 +40,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 
   void _performSearch() {
-    ref.read(paginatedSearchProvider.notifier).search(
+    setState(() {
+      _shuffledWords = null; // Reset shuffle when search changes
+    });
+    ref.read(vocabularyStateProvider.notifier).loadSearchResults(
           query: _query.isEmpty ? null : _query,
           week: _selectedWeek,
           day: _selectedDay,
@@ -49,13 +53,36 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final searchState = ref.watch(paginatedSearchProvider);
+    final vocabularyState = ref.watch(vocabularyStateProvider);
 
-    // Apply shuffle to results if enabled (client-side)
-    var displayWords = searchState.vocabulary;
-    if (_shuffled && displayWords.isNotEmpty) {
-      displayWords = List.from(displayWords)..shuffle();
+    // Get base words from state
+    List<Vocabulary> baseWords = vocabularyState.searchResults.when(
+      data: (words) => words,
+      loading: () => [],
+      error: (_, __) => [],
+    );
+
+    // Initialize or update shuffled list when needed
+    if (_shuffled && baseWords.isNotEmpty) {
+      if (_shuffledWords == null ||
+          _shuffledWords!.length != baseWords.length) {
+        _shuffledWords = List<Vocabulary>.from(baseWords)..shuffle();
+      } else {
+        // Update shuffled words with current favorite status
+        for (int i = 0; i < _shuffledWords!.length; i++) {
+          final shuffledWord = _shuffledWords![i];
+          final updatedWord = baseWords.firstWhere(
+            (w) => w.id == shuffledWord.id,
+            orElse: () => shuffledWord,
+          );
+          _shuffledWords![i] = updatedWord;
+        }
+      }
+    } else {
+      _shuffledWords = null;
     }
+
+    final displayWords = _shuffledWords ?? baseWords;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -183,7 +210,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
-                        onPressed: () => setState(() => _shuffled = !_shuffled),
+                        onPressed: () => setState(() {
+                          _shuffled = !_shuffled;
+                          _shuffledWords = null; // Reset to force reshuffle
+                        }),
                       ),
                       // Clear all button
                       if (_selectedWeek != null ||
@@ -264,73 +294,67 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
             ),
             Expanded(
-              child: searchState.error != null
-                  ? Center(child: Text(searchState.error.toString()))
-                  : Column(
-                      children: [
-                        // Word count
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSizes.md,
-                            vertical: AppSizes.sm,
-                          ),
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.list_alt,
-                                size: 16,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                '${searchState.totalCount} ${searchState.totalCount == 1 ? 'word' : 'words'}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
-                          ),
+              child: vocabularyState.searchResults.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+                data: (words) {
+                  if (words.isEmpty && !_shuffled) {
+                    return const Center(child: Text('No results.'));
+                  }
+
+                  return Column(
+                    children: [
+                      // Word count
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.md,
+                          vertical: AppSizes.sm,
                         ),
-                        Expanded(
-                          child: searchState.isEmpty &&
-                                  !searchState.isLoadingMore
-                              ? const Center(child: Text('No results.'))
-                              : PaginatedWordListView(
-                                  words: displayWords,
-                                  hasMore: searchState.hasMore && !_shuffled,
-                                  isLoadingMore: searchState.isLoadingMore,
-                                  onLoadMore: () => ref
-                                      .read(paginatedSearchProvider.notifier)
-                                      .loadMore(),
-                                  emptyText: 'No results.',
-                                  onWordLongPress: (word) =>
-                                      WordInfoSnackBar.show(context, word),
-                                  onToggleFavorite: (word) {
-                                    // Update search results immediately
-                                    ref
-                                        .read(paginatedSearchProvider.notifier)
-                                        .updateFavoriteStatus(
-                                            word.id, !word.isFavourite);
-                                    // Then perform the actual toggle
-                                    ref
-                                        .read(vocabularyActionsProvider)
-                                        .toggleFavourite(word);
-                                  },
-                                ),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.list_alt,
+                              size: 16,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${words.length} ${words.length == 1 ? 'word' : 'words'}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Expanded(
+                        child: WordListView(
+                          words: displayWords,
+                          emptyText: 'No results.',
+                          onWordLongPress: (word) =>
+                              WordInfoSnackBar.show(context, word),
+                          onToggleFavorite: (word) {
+                            ref
+                                .read(vocabularyStateProvider.notifier)
+                                .toggleFavorite(word);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ],
         ),

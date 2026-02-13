@@ -60,7 +60,7 @@ class WordListItem extends ConsumerWidget {
   }
 }
 
-class WordTrailingActions extends StatefulWidget {
+class WordTrailingActions extends ConsumerWidget {
   const WordTrailingActions({
     required this.word,
     this.onToggleFavorite,
@@ -70,57 +70,13 @@ class WordTrailingActions extends StatefulWidget {
   final Vocabulary word;
   final void Function(Vocabulary word)? onToggleFavorite;
 
-  @override
-  State<WordTrailingActions> createState() => _WordTrailingActionsState();
-}
-
-class _WordTrailingActionsState extends State<WordTrailingActions> {
-  bool _isFavourite = false;
-  bool _isUpdating = false;
-  DateTime? _lastTapTime;
-
-  @override
-  void initState() {
-    super.initState();
-    _isFavourite = widget.word.isFavourite;
-  }
-
-  @override
-  void didUpdateWidget(WordTrailingActions oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // Always update local state when widget updates to ensure synchronization
-    if (oldWidget.word.id != widget.word.id ||
-        oldWidget.word.isFavourite != widget.word.isFavourite) {
-      setState(() {
-        _isFavourite = widget.word.isFavourite;
-        _isUpdating = false;
-      });
-    }
-  }
-
   void _handleToggle() {
-    if (_isUpdating) return; // Prevent multiple taps
-
-    // Add debouncing to prevent rapid successive taps
-    final now = DateTime.now();
-    if (_lastTapTime != null &&
-        now.difference(_lastTapTime!).inMilliseconds < 300) {
-      return; // Ignore taps within 300ms of previous tap
-    }
-    _lastTapTime = now;
-
-    setState(() {
-      _isFavourite = !_isFavourite;
-      _isUpdating = true;
-    });
-
     // Call the actual toggle function
-    widget.onToggleFavorite?.call(widget.word);
+    onToggleFavorite?.call(word);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: AppSizes.trailingWidth,
       child: Column(
@@ -131,14 +87,14 @@ class _WordTrailingActionsState extends State<WordTrailingActions> {
             width: AppSizes.iconButtonBox,
             height: AppSizes.iconButtonBox,
             child: IconButton(
-              tooltip: _isFavourite ? 'Remove favourite' : 'Add favourite',
+              tooltip: word.isFavourite ? 'Remove favourite' : 'Add favourite',
               padding: EdgeInsets.zero,
               visualDensity: AppSizes.compactIconDensity,
               constraints: AppSizes.iconButtonTightConstraints,
               icon: Icon(
-                _isFavourite ? Icons.star : Icons.star_border,
+                word.isFavourite ? Icons.star : Icons.star_border,
                 size: AppSizes.iconSizeSm,
-                color: _isFavourite
+                color: word.isFavourite
                     ? AppColors.favouriteActive
                     : AppColors.favouriteInactive,
               ),
@@ -162,8 +118,8 @@ class _WordTrailingActionsState extends State<WordTrailingActions> {
                   ),
                   onPressed: () {
                     final tts = ref.read(ttsServiceProvider);
-                    final kanji = widget.word.kanji.trim();
-                    final kana = tts.sanitizeKana(widget.word.furigana);
+                    final kanji = word.kanji.trim();
+                    final kana = tts.sanitizeKana(word.furigana);
                     final text = kanji.isNotEmpty ? kanji : kana;
                     tts.speak(text);
                   },

@@ -41,7 +41,7 @@ final class PaginatedSearchProvider
   }
 }
 
-String _$paginatedSearchHash() => r'7c2d228ec2493b1e781e0683c5f684d06365c33c';
+String _$paginatedSearchHash() => r'3eec542a976d6b12a5b1ad6f6cae6dc8203665f0';
 
 abstract class _$PaginatedSearch extends $Notifier<SearchState> {
   SearchState build();

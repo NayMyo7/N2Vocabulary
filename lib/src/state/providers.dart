@@ -3,10 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/db/n2vocabulary_database.dart';
 import '../data/repositories/n2vocabulary_repository.dart';
-import '../domain/models/paginated_result.dart';
 import '../domain/models/question.dart';
 import '../domain/models/vocabulary.dart';
-import '../features/home/home_providers.dart';
 
 part 'providers.g.dart';
 
@@ -39,43 +37,7 @@ class VocabularyActions {
 
   final Ref ref;
 
-  Future<void> toggleFavourite(Vocabulary vocabulary) async {
-    final repo = ref.read(repositoryProvider);
-
-    if (vocabulary.isFavourite) {
-      await repo.removeFavourite(vocabulary.id);
-    } else {
-      await repo.markFavourite(vocabulary.id);
-    }
-
-    // Invalidate dependent providers to refresh their data
-    ref.invalidate(favouriteVocabularyProvider);
-    ref.invalidate(vocabularyByIdProvider(vocabulary.id));
-    ref.invalidate(dayWordsProvider);
-
-    // Also invalidate the specific vocabularyByWeekDayProvider to ensure fresh data
-    final lessonSelection = ref.read(lessonSelectionProvider);
-    if (lessonSelection.hasValue) {
-      final selection = lessonSelection.value!;
-      ref.invalidate(
-          vocabularyByWeekDayProvider(selection.week, selection.day));
-    }
-    // Note: We don't invalidate all providers when loading as it's too expensive
-    // The dayWordsProvider invalidation will handle refreshing when needed
-
-    // Don't invalidate paginated providers to prevent list disappearing
-    // Search and favorites screens handle updates manually via updateFavoriteStatus
-  }
-}
-
-@riverpod
-Future<List<Vocabulary>> favouriteVocabulary(Ref ref) async {
-  final repository = ref.read(repositoryProvider);
-  final result = await repository.retrieveFavouriteVocabularyPaginated(
-    pagination: const PaginationParams(
-        pageSize: 1000), // Load all favourites with reasonable limit
-  );
-  return result.items;
+  // Legacy methods removed - use VocabularyStateNotifier instead
 }
 
 @riverpod

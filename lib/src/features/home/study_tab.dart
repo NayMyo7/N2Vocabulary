@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/core.dart';
 import '../../domain/models/vocabulary.dart';
 import '../../state/providers.dart';
+import '../../state/vocabulary_state_notifier.dart';
 import '../../utils/word_info_snackbar.dart';
 import '../../widgets/widgets.dart';
-import 'home_providers.dart';
 
 class StudyTab extends ConsumerStatefulWidget {
   const StudyTab({super.key});
@@ -20,10 +20,39 @@ class _StudyTabState extends ConsumerState<StudyTab> {
   List<Vocabulary>? _shuffledWords;
 
   @override
-  Widget build(BuildContext context) {
-    final dayWordsAsync = ref.watch(dayWordsProvider);
+  void initState() {
+    super.initState();
+    // Load initial data when widget is first created
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadDataForCurrentSelection();
+    });
+  }
 
-    return dayWordsAsync.when(
+  void _loadDataForCurrentSelection() {
+    final lessonSelection = ref.read(lessonSelectionProvider);
+    if (lessonSelection.hasValue) {
+      final selection = lessonSelection.value!;
+      ref
+          .read(vocabularyStateProvider.notifier)
+          .loadDayWords(selection.week, selection.day);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final vocabularyState = ref.watch(vocabularyStateProvider);
+
+    // Load data whenever lesson selection changes
+    ref.listen(lessonSelectionProvider, (_, next) {
+      if (next.hasValue) {
+        final selection = next.value!;
+        ref
+            .read(vocabularyStateProvider.notifier)
+            .loadDayWords(selection.week, selection.day);
+      }
+    });
+
+    return vocabularyState.dayWords.when(
       data: (dayWords) {
         return Column(
           children: [
@@ -107,8 +136,17 @@ class _StudyTabState extends ConsumerState<StudyTab> {
                 emptyText: 'No vocabulary.',
                 onWordLongPress: (vocab) =>
                     WordInfoSnackBar.show(context, vocab),
-                onToggleFavorite: (vocab) =>
-                    ref.read(vocabularyActionsProvider).toggleFavourite(vocab),
+                onToggleFavorite: (vocab) {
+                  ref
+                      .read(vocabularyStateProvider.notifier)
+                      .toggleFavorite(vocab);
+                  // Also update shuffled list if in shuffle mode for immediate UI update
+                  _updateShuffledWordsFavoriteStatus(
+                      vocab.id,
+                      vocab.copyWith(
+                        favourite: vocab.isFavourite ? 0 : 1,
+                      ));
+                },
               ),
             ),
           ],
@@ -152,6 +190,16 @@ class _StudyTabState extends ConsumerState<StudyTab> {
         _isShuffled = true;
       }
     });
+  }
+
+  void _updateShuffledWordsFavoriteStatus(
+      int vocabularyId, Vocabulary updatedVocabulary) {
+    if (_isShuffled && _shuffledWords != null) {
+      final index = _shuffledWords!.indexWhere((v) => v.id == vocabularyId);
+      if (index != -1) {
+        _shuffledWords![index] = updatedVocabulary;
+      }
+    }
   }
 
   List<Vocabulary> _getWordsToDisplay(List<Vocabulary> dayWords) {

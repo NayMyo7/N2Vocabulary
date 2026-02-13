@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
 import '../../state/providers.dart';
+import '../../state/vocabulary_state_notifier.dart';
 import '../../utils/furigana_util.dart';
 import '../../widgets/widgets.dart';
 import 'week_day_data.dart';
 import 'flashcards_tab.dart';
-import 'home_providers.dart';
 import 'lesson_drawer.dart';
 import 'quiz_tab.dart';
 import 'study_tab.dart';
@@ -148,8 +148,8 @@ class _MainBody extends ConsumerWidget {
       return const StudyTab();
     }
 
-    final dayWordsAsync = ref.watch(dayWordsProvider);
-    return dayWordsAsync.when(
+    final vocabularyState = ref.watch(vocabularyStateProvider);
+    return vocabularyState.dayWords.when(
       data: (dayWords) {
         if (tabIndex == 1) {
           return FlashcardsTab(words: dayWords);

@@ -42,7 +42,7 @@ final class PaginatedFavouritesProvider
 }
 
 String _$paginatedFavouritesHash() =>
-    r'5360afbd9c50ed3d26a9708f7a9330d6371c091d';
+    r'5e6fe917e66b8b9550e1baaefe2ecfce07f466af';
 
 abstract class _$PaginatedFavourites extends $Notifier<FavouritesState> {
   FavouritesState build();
