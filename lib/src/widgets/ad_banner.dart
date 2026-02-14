@@ -16,9 +16,9 @@ class _AdBannerState extends State<AdBanner> {
   bool _bannerLoaded = false;
 
   static const String _releaseBannerUnitIdAndroid =
-      'ca-app-pub-8308156736791023/8516180965';
+      'ca-app-pub-8308156736791023/5463477298';
   static const String _releaseBannerUnitIdIos =
-      'ca-app-pub-8308156736791023/2965073017';
+      'ca-app-pub-8308156736791023/7222545439';
 
   static const String _testBannerUnitIdAndroid =
       'ca-app-pub-3940256099942544/6300978111';
